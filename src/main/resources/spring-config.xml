@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/p http://www.springframework.org/schema/p/spring-p.xsd">
+
+
+    <!--定义数据源-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="url" value="jdbc:mysql://localhost:3306/WD"/>
+        <property name="username" value="zxj" />
+        <property name="password" value="zxj@123" />
+        <property name="poolPreparedStatements" value="true" />
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize"><value>1</value></property>
+        <property name="maxActive"><value>5</value></property>
+        <property name="minIdle"><value>1</value></property>
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait"><value>60000</value></property>
+        <!-- 配置监控统计拦截的filters -->
+        <property name="filters"><value>stat</value></property>
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis"><value>60000</value></property>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis"><value>300000</value></property>
+        <!--
+        <property name="validationQuery"><value>SELECT 'x'</value></property>
+        <property name="testWhileIdle"><value>true</value></property>
+        <property name="testOnBorrow"><value>false</value></property>
+        <property name="testOnReturn"><value>false</value></property>
+        <property name="poolPreparedStatements"><value>true</value></property>
+        <property name="maxOpenPreparedStatements"><value>20</value></property>
+         -->
+    </bean>
+
+    <!--MyBatis配置-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="mapperLocations" value="classpath:mapper/*.xml" />
+        <!--<property name="configLocation" value="classpath:mybatis-config.xml"/>-->
+    </bean>
+
+    <!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.zxj.wd.dao" />
+        <property name="sqlSessionFactoryBeanName"  value="sqlSessionFactory"></property>
+    </bean>
+
+
+
+    <!-- 配置事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!-- 定义事务通知 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <!-- 定义方法的过滤规则 -->
+        <tx:attributes>
+            <!-- 所有方法都使用事务 -->
+            <tx:method name="*" propagation="REQUIRED" rollback-for="Exception"/>
+            <!-- 定义所有get开头的方法都是只读的 -->
+             <tx:method name="get*" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- 定义AOP配置 -->
+    <aop:config>
+        <!-- 定义一个切入点 -->
+        <aop:pointcut expression="execution (* com.zxj.wd.service..*.*(..))" id="services"/>
+        <!-- 对切入点和事务的通知，进行适配 -->
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="services"/>
+    </aop:config>
+</beans>
