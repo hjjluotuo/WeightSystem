@@ -1,13 +1,14 @@
 package com.zxj.wd.controller;
 
 import com.zxj.wd.dao.IUserDao;
+import com.zxj.wd.util.AjaxUtils;
 import org.apache.log4j.Logger;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +31,7 @@ public class LoginController {
         return user;
     }
 
-    @RequestMapping(value ="/listAllUsers")
+    @RequestMapping(path ="/listAllUsers")
     public List<Map> getAllUsers(){
         List<Map> result = new ArrayList<Map>();
         try {
@@ -39,5 +40,12 @@ public class LoginController {
             log.error(e);
         }
         return result;
+    }
+
+    @PostMapping(path = "/ajaxTest")
+    public void ajax(HttpServletResponse response) throws Exception {
+
+        AjaxUtils.rendJson(response,true,"this is ajax test.");
+
     }
 }
