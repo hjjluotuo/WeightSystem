@@ -9,8 +9,8 @@ import java.util.Map;
  */
 public interface IUserDao {
 
-    public Map getUserById(Integer id)throws SQLException;
+     Map getUserById(Integer id)throws SQLException;
 
-    public List<Map> getAllUsers()throws SQLException;
+     List<Map> getAllUsers()throws SQLException;
 
 }

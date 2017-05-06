@@ -44,6 +44,7 @@
         <!-- log4j日志文件管理包版本 -->
         <slf4j.version>1.6.6</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
+        <log4j2.verson>2.7</log4j2.verson>
         <!-- junit版本号 -->
         <junit.version>4.12</junit.version>
         <!-- mybatis版本号 -->
@@ -167,6 +168,8 @@
 
         <!-- 日志文件管理包 -->
         <!-- log start -->
+        <!--log4j2-->
+        <!--
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
@@ -177,6 +180,31 @@
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
+        -->
+        <!--log4j2 start-->
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j2.verson}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j2.verson}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-web -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-web</artifactId>
+            <version>${log4j2.verson}</version>
+        </dependency>
+
+
+        <!--log4j2 end-->
 
         <!-- log end -->
 

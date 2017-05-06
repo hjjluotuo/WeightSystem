@@ -2,7 +2,8 @@ package com.zxj.wd.controller;
 
 import com.zxj.wd.dao.IUserDao;
 import com.zxj.wd.util.AjaxUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +21,8 @@ import java.util.Map;
  */
 @RestController
 public class LoginController {
-    private static  final Logger log = Logger.getLogger(LoginController.class);
+    private static  final Logger log = LogManager.getLogger(LoginController.class);
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Resource
     private IUserDao userDao;
     @RequestMapping("/login")
